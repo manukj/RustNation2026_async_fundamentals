@@ -44,3 +44,5 @@ enum TokioMainState {
 }
 // pining is a concept that u dont lose the memory when async is executed 
 
+
+hand-written version of what Rust’s async/await
