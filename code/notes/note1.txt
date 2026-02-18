@@ -46,3 +46,44 @@ enum TokioMainState {
 
 
 hand-written version of what Rust’s async/await
+What it does
+
+Runs a tiny async program on a single-thread Tokio runtime.
+tokio_main() “awaits” hello(), and hello() “awaits” print_async().
+print_async() prints: “Hello, async world!”
+How it works (simple mental model)
+
+Each async function is represented as a struct + enum state machine:
+TokioMainFuture with states Start -> AwaitingHello -> Done
+HelloFuture with states Start -> AwaitingPrint -> Done
+Calling poll() is like saying: “Do a bit of work now; tell me if you’re done.”
+Return Poll::Ready(()) => finished
+Return Poll::Pending => not finished yet, try later
+Step-by-step flow
+
+Runtime calls tokio_main future’s poll.
+In Start, it creates hello() future, moves to AwaitingHello.
+In AwaitingHello, it polls hello().
+hello() does the same with print_async().
+print_async() prints once and returns Ready.
+Then hello() returns Ready, then tokio_main() returns Ready.
+Why Pin and unsafe appear
+
+Futures may contain self-references internally, so they must not be moved once polled.
+poll() requires Pin<&mut Self>.
+Pin::new_unchecked(...) is used here manually to pin inner futures; this is educational but advanced.
+In real code, async/await usually avoids writing this unsafe machinery yourself.
+If you want, I can also show the equivalent normal version using plain async fn + .await so you can compare line-by-line.
+
+
+// 
+waker
+ it decides what needs to be woken up 
+ Vtable : dyn is a table with the object types and object memeory 
+
+// when state function is high which is when u add more await in one function 
+
+
+// #[tokio::main(flavor = "current_thread")]
+
+to put in one thread 
