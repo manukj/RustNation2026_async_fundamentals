@@ -87,3 +87,30 @@ waker
 // #[tokio::main(flavor = "current_thread")]
 
 to put in one thread 
+
+// tokio file system are not very much handled in tokio 
+
+//spawn_blocking means: put blocking/synchronous work on a separate thread pool so your async tasks keep running. 
+
+to add tokio full 
+cargo add tokio -F full
+
+// to run somethign on background
+tokio::spawn starts an async task in the background on Tokio’s runtime.
+
+// from_utf8_lossy 
+stream of byte not neccassry a valid byte 
+
+
+// Channels
+“Do not communicate by sharing memory; instead, share memory by communicating.” - Rob Pike
+
+
+multiple thread , and program to quit, static varaible to quit 
+and thread is referening to quit
+
+mutex pattern learn ..
+
+// no cleanup is needed in mpsc channel is because tx and rx impements drop trait 
+let (tx, mut rx) = mpsc::channel(32);
+
