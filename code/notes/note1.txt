@@ -1,0 +1,46 @@
+what happens inside tokio 
+
+#[tokio::main]
+async fn main() {
+    hello().await;
+}
+
+async fn hello() {
+    println!("Hello, async world!");
+}
+
+is replaced with 
+
+fn main() {
+    tokio::runtime::Builder::new_multi_thread(). // uses a builder pattern
+        .enable_all()
+        .build() 
+        .unwrap()
+        .block_on(tokio_main());
+}
+
+// block_on : block the main thread until the async is excecuted 
+//  .build()  say you have 8 CPU 8 thread
+async fn tokio_main() {
+    hello().await;
+}
+
+
+async fn hello() {
+    println!("Hello, async world!");
+}
+
+what really happens in async ? 
+
+
+// Future is a trait, which comes with async 
+
+what actually happens in await ? 
+// a state machine is implemented 
+enum TokioMainState {
+    Start,
+    AwaitingHello,
+    Done,
+}
+// pining is a concept that u dont lose the memory when async is executed 
+
